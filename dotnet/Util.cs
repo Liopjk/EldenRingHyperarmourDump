@@ -1,11 +1,12 @@
 using SoulsFormats;
 using SoulsAssetPipeline.Animation;
+using System.Xml;
 
 namespace EldenRingHyperArmourDump
 {
     class Util
     {
-        public static void DumpAnimData(string outFilePath = "all_toughnessParams.csv", string anibndPath = @"../resources/1.07/c0000.anibnd.dcx")
+        public static void DumpAnimData(string outFilePath = "animationToughnessParams.csv", string anibndPath = @"../resources/1.07/c0000.anibnd.dcx")
         {
             using StreamWriter taeFile = new StreamWriter(outFilePath);
             {
@@ -41,8 +42,45 @@ namespace EldenRingHyperArmourDump
                 }
             }
         }
+    
+        public static void DumpToughnessParamData(  string outFilePath="toughnessParams.csv",
+                                                    string paramPath=@"../resources/1.07/gameparam.parambnd.dcx", 
+                                                    string paramDefPath="../resources/1.07/ToughnessParam.xml")
+        {
+            using StreamWriter toughFile = new StreamWriter(outFilePath);
+            {
+                PARAMDEF toughParamDef = PARAMDEF.XmlDeserialize(paramDefPath);
+                
+                BND4 gameParams = BND4.Read(paramPath);
+                foreach (var f in gameParams.Files)
+                {
+                    if (f.Name.EndsWith("ToughnessParam.param"))
+                    {
+                        
+                        PARAM toughnessParam = PARAM.Read(f.Bytes);
+                        bool success = toughnessParam.ApplyParamdefCarefully(toughParamDef);
+                        toughFile.WriteLine($"toughnessParamId,correctionRate,minToughness,isNonEffectiveCorrectionForMin,spEffectId,proCorrectionRate");
+                        foreach (var r in toughnessParam.Rows)
+                        {
+                            int toughnessParamId = r.ID;
+                            float correctionRate = (float)r.Cells[0].Value;
+                            UInt16 minToughness = (UInt16)r.Cells[1].Value;
+                            
+                            UInt16 isNonEffectiveCorrectionForMin = (UInt16)(byte)r.Cells[2].Value;
+                            Int32 spEffectId = (Int32)r.Cells[4].Value;
+                            float proCorrectionRate = (float)r.Cells[5].Value;
+                            toughFile.WriteLine($"{toughnessParamId},{correctionRate},{minToughness},{isNonEffectiveCorrectionForMin},{spEffectId},{proCorrectionRate}");
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
     }
 
-
+    
 }
 
