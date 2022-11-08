@@ -2,20 +2,37 @@
 
 using SoulsFormats;
 using SoulsAssetPipeline;
+using SoulsAssetPipeline.Animation;
+
 
 
 BND4 c000 = BND4.Read(@"../resources/1.07/c0000.anibnd.dcx");
-String x = new String("a478.tae");
-Console.WriteLine("BinderFiles:");
+
+Console.WriteLine("TaeId,AnimId,ToughnessParamId,ToughnessType");
 foreach (BinderFile f in c000.Files)
 {
-    if (f.Name.EndsWith(x))
+    if (f.Name.EndsWith(".tae")) 
     {
+        TAE tae = TAE.Read(f.Bytes);
         
-        Console.WriteLine($"{f.GetType()}: {f.Name} ({f.Bytes.Length} bytes)");
-        TAE3 tae = TAE3.Read(f.Bytes);
-        
-        Console.WriteLine($"Animations: {tae.Animations.Count}");
+        foreach (var a in tae.Animations)
+        {                
+            foreach (var e in a.Events)
+            {
+                if (e.Type == 795) // InvokeDS3Poise
+                {
+                    byte[] parameters = e.GetParameterBytes(false);
+                    int ToughnessParamId = parameters[0];
+                    
+                    ushort ToughnessType = parameters[1];
+                    string paramsString = BitConverter.ToString(parameters);
+                    Console.WriteLine($"{f.ID},{a.ID},{ToughnessParamId},{ToughnessType}");
+                }
+                
+            }
+
+
+        }
         
     }
     
