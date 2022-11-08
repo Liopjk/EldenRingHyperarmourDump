@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SoulsFormats\SoulsFormats\SoulsFormats.csproj" />
     <ProjectReference Include="..\..\SoulsAssetPipeline\SoulsAssetPipeline\SoulsAssetPipeline.csproj" />
     
   </ItemGroup>
