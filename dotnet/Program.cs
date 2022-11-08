@@ -6,11 +6,11 @@ using SoulsAssetPipeline.Animation;
 
 
 
-BND4 c000 = BND4.Read(@"../resources/1.07/c0000.anibnd.dcx");
+
 
 using StreamWriter taeFile = new StreamWriter("all_toughnessParams.csv");
 {
-
+    BND4 c000 = BND4.Read(@"../resources/1.07/c0000.anibnd.dcx");
     taeFile.WriteLine("TaeId,AnimId,FullAnimId,ToughnessParamId,ToughnessType");
     foreach (BinderFile f in c000.Files)
     {
