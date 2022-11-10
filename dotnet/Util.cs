@@ -6,11 +6,15 @@ namespace EldenRingHyperArmourDump
 {
     class Util
     {
-        public static void DumpAnimData(string outFilePath = "animationToughnessParams.csv", string anibndPath = @"../resources/1.07/c0000.anibnd.dcx")
+        public static void DumpAnimData(string outFilePath = "animationToughnessParams.csv", string resPath = @"../resources/")
         {
+            if (!resPath.EndsWith("/"))
+            {
+                resPath+= "/";
+            }
             using StreamWriter taeFile = new StreamWriter(outFilePath);
             {
-                BND4 c000 = BND4.Read(anibndPath);
+                BND4 c000 = BND4.Read(resPath + "c0000.anibnd.dcx");
                 taeFile.WriteLine("TaeId,AnimId,FullAnimId,ToughnessParamId,ToughnessType");
                 foreach (BinderFile f in c000.Files)
                 {

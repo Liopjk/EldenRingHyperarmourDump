@@ -9,9 +9,8 @@ namespace EldenRingHyperArmourDump
     {
         static void Main(string[] args)
         {
-            Util.DumpAnimData("animationToughnessParams.csv", @"../resources/1.07/c0000.anibnd.dcx");
-            Util.DumpToughnessParamData("toughnessParams.csv",
-                                        @"../resources/1.07/");
+            Util.DumpAnimData("animationToughnessParams.csv", @"../resources/1.07/");
+            Util.DumpToughnessParamData("toughnessParams.csv", @"../resources/1.07/");
         }
     }
     
