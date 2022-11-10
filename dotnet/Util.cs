@@ -44,14 +44,17 @@ namespace EldenRingHyperArmourDump
         }
     
         public static void DumpToughnessParamData(  string outFilePath="toughnessParams.csv",
-                                                    string paramPath=@"../resources/1.07/gameparam.parambnd.dcx", 
-                                                    string paramDefPath="../resources/1.07/ToughnessParam.xml")
+                                                    string resPath=@"../resources/")
         {
             using StreamWriter toughFile = new StreamWriter(outFilePath);
             {
-                PARAMDEF toughParamDef = PARAMDEF.XmlDeserialize(paramDefPath);
                 
-                BND4 gameParams = BND4.Read(paramPath);
+                if (!resPath.EndsWith("/"))
+                {
+                    resPath+= "/";
+                }
+                PARAMDEF toughParamDef = PARAMDEF.XmlDeserialize(resPath + "ToughnessParam.xml");
+                BND4 gameParams = BND4.Read(resPath + "gameparam.parambnd.dcx");
                 foreach (var f in gameParams.Files)
                 {
                     if (f.Name.EndsWith("ToughnessParam.param"))
